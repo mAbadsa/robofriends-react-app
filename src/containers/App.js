@@ -20,7 +20,7 @@ class App extends Component {
 
         const res = await fetch('https://jsonplaceholder.typicode.com/users');
         const users = await res.json();
-        this.setState({robots: users})
+        this.setState({ robots: users })
     }
 
     onSearchChange = (e) => {
