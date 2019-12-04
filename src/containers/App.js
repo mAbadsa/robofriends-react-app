@@ -5,46 +5,29 @@ import SearchBox from '../components/SearchBox';
 import Scroll from '../components/Scroll';
 import '../containers/App.css';
 
-import { setSearchField } from '../actions';
+import { setSearchField, requestRobots } from '../actions';
 
 const mapStateToProps = state => {
     return {
-        searchField: state.searchField
+        searchField: state.searchField,
+        robots: requestRobots.robot,
+        isPending: requestRobots.isPending,
+        error: requestRobots.error
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSearchChange: (e) => dispatch(setSearchField(e.target.value))
+        onSearchChange: (e) => dispatch(setSearchField(e.target.value)),
+        requestRobots: () => dispatch(requestRobots())
     }
 }
 
 class App extends Component {
-    constructor () {
-        super()
-        this.state = {
-            robots: []
-        }
-    }
 
-    async componentDidMount() {
-/*         const users = fetch('https://jsonplaceholder.typicode.com/users')
-        .then(res => res.json())
-        .then(users => this.setState({ robots: users })) */
-        const res = await fetch('https://jsonplaceholder.typicode.com/users');
-        const users = await res.json();
-        this.setState({ robots: users })
+    componentDidMount() {
+        this.setState({ robots: requestRobots })
     }
-
-/*     onSearchChange = (e) => {
-        this.setState({ searchField: e.target.value });
-        // const filteredRobot =  this.state.robots.filter(robot => {
-        //     return robot.name.toLowerCase().includes(this.state.searchField.toLowerCase());
-        // })
-        // this.setState({ robots: filteredRobot });
-        // console.log(this.state.robots);
-    }
- */
     render () {
         const { robots } = this.state;
         const {searchField, onSearchChange } = this.props;
