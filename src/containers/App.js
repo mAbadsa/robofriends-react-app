@@ -9,32 +9,31 @@ import { setSearchField, requestRobots } from '../actions';
 
 const mapStateToProps = state => {
     return {
-        searchField: state.searchField,
-        robots: requestRobots.robot,
-        isPending: requestRobots.isPending,
-        error: requestRobots.error
+        searchField: state.searchRobots.searchField,
+        isPending: state.requestRobots.isPending,
+        robots: state.requestRobots.robots,
+        error: state.requestRobots.error
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         onSearchChange: (e) => dispatch(setSearchField(e.target.value)),
-        requestRobots: () => dispatch(requestRobots())
+        onRequestRobots: () => dispatch(requestRobots())
     }
 }
 
 class App extends Component {
 
     componentDidMount() {
-        this.setState({ robots: requestRobots })
+        this.props.onRequestRobots()
     }
     render () {
-        const { robots } = this.state;
-        const {searchField, onSearchChange } = this.props;
+        const {searchField, onSearchChange, robots, isPending } = this.props;
         const filteredRobot =  robots.filter(robot => {
             return robot.name.toLowerCase().includes(searchField.toLowerCase());
         })
-        if(!robots.length) {
+        if(isPending) {
             return (
                 <div className="tc pa3">
                     <h1 className="f1">Robot App</h1>
